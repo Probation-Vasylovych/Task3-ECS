@@ -1,4 +1,3 @@
-# Java / build
 *.class
 *.log
 *.ctxt
@@ -15,7 +14,6 @@
 hs_err_pid*
 replay_pid*
 
-# Terraform
 .terraform/
 .terraform.lock.hcl
 
@@ -37,30 +35,27 @@ override.tf.json
 .terraformrc
 terraform.rc
 
-# TERRAGRUNT (ДОДАТИ)
 .terragrunt-cache/
 
-#  PACKER (ДОДАТИ)
 packer_cache/
 *.pkrvars.hcl
 
-# AWS KEYS (ДУЖЕ ВАЖЛИВО)
 *.pem
 *.key
 
-# ANSIBLE
+
 *.retry
 
-# Secrets
+
 .keys/
 .keys/*
 
-# Build
+
 target/
 
-# OS
+
 .DS_Store
 
-# IDE
+
 .idea/
 .vscode/

@@ -8,7 +8,7 @@ plan: init
 	terraform plan -var-file=workspace_vars/${LLM_ENV}.tfvars
 
 apply: init
-	terraform apply -var-file=workspace_vars/${LLM_ENV}.tfvars
+	terraform apply -auto-approve -var-file=workspace_vars/${LLM_ENV}.tfvars
 
 destroy: init
 	terraform destroy -var-file=workspace_vars/${LLM_ENV}.tfvars
