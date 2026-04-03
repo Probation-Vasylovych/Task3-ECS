@@ -31,3 +31,12 @@ module "github_oidc_ecr" {
   ecr_repository_names = local.ecr_repositories
   common_tags         = local.common_tags
 }
+
+module "github_oidc_terraform" {
+  source = "./modules/github-oidc-terraform"
+
+  github_org    = var.github_org
+  github_repo   = var.github_repo
+  github_branch = var.github_branch
+  common_tags   = local.common_tags
+}
