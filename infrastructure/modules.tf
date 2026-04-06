@@ -81,7 +81,7 @@ module "alb" {
 }
 
 module "ecs_iam_role" {
-  source = "./modules/ecs-iam_role"
+  source = "./modules/ecs-iam-role"
 
   project = var.project
   env     = var.env
