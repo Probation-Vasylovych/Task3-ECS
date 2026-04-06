@@ -80,8 +80,8 @@ module "alb" {
   common_tags = local.common_tags
 }
 
-module "ecs_iam" {
-  source = "./modules/ecs-iam"
+module "ecs_iam_role" {
+  source = "./modules/ecs-iam_role"
 
   project = var.project
   env     = var.env
