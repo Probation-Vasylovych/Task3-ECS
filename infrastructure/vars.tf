@@ -35,3 +35,11 @@ variable "github_branch" {
 variable "aws_account_id" {
   type = number
 }
+
+variable "project" {
+  type = string
+}
+
+variable "domain_name" {
+  type = string
+}
