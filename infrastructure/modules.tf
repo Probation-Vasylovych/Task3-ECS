@@ -96,7 +96,7 @@ module "ecs_task_web" {
   env     = var.env
 
   aws_region         = var.region
-  execution_role_arn = module.ecs_iam.execution_role_arn
+  execution_role_arn = module.ecs_iam_role.execution_role_arn
   web_image          = "${module.ecr.repository_urls["openwebui"]}:latest"
 
   common_tags = local.common_tags
@@ -109,7 +109,7 @@ module "ecs_task_ollama" {
   env     = var.env
 
   aws_region         = var.region
-  execution_role_arn = module.ecs_iam.execution_role_arn
+  execution_role_arn = module.ecs_iam_role.execution_role_arn
   ollama_image       = "${module.ecr.repository_urls["ollama"]}:latest"
 
   common_tags = local.common_tags
