@@ -67,7 +67,7 @@ data "aws_iam_policy_document" "terraform_backend_s3" {
     ]
 
     resources = [
-      "arn:aws:s3:::llm-ecs/ecs/llm-ecs.tfstate"
+      "arn:aws:s3:::llm-ecs/env:/*/ecs/*.tfstate"
     ]
   }
 
@@ -82,7 +82,7 @@ data "aws_iam_policy_document" "terraform_backend_s3" {
     ]
 
     resources = [
-      "arn:aws:s3:::llm-ecs/ecs/llm-ecs.tfstate.tflock"
+      "arn:aws:s3:::llm-ecs/env:/*/ecs/*.tfstate.tflock"
     ]
   }
 }
