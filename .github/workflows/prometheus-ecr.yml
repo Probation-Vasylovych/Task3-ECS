@@ -45,6 +45,7 @@ jobs:
         run: |
           docker build \
             -t $REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG \
+            -t $REGISTRY/${{ env.ECR_REPOSITORY }}:latest \
             ./app/prometheus
 
       - name: Push image
@@ -53,3 +54,4 @@ jobs:
           IMAGE_TAG: ${{ github.sha }}
         run: |
           docker push $REGISTRY/${{ env.ECR_REPOSITORY }}:$IMAGE_TAG
+          docker push $REGISTRY/${{ env.ECR_REPOSITORY }}:latest

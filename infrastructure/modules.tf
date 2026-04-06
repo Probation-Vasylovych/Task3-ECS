@@ -40,3 +40,77 @@ module "github_oidc_terraform" {
   github_branch = var.github_branch
   common_tags   = local.common_tags
 }
+
+module "ecs_cluster" {
+  source = "./modules/ecs-cluster"
+
+  env         = var.env
+  common_tags = local.common_tags
+}
+
+module "security_groups" {
+  source = "./modules/security-groups"
+
+  project = var.project
+  env     = var.env
+  vpc_id  = module.vpc.vpc_id
+
+  common_tags = local.common_tags
+}
+
+module "dns" {
+  source = "./modules/dns"
+
+  env         = var.env
+  domain_name = var.domain_name
+  common_tags = local.common_tags
+}
+
+module "alb" {
+  source = "./modules/alb"
+
+  project = var.project
+  env     = var.env
+
+  vpc_id               = module.vpc.vpc_id
+  public_subnet_ids    = module.vpc_config.public_subnet_ids
+  alb_security_group_id = module.security_groups.alb_security_group_id
+  acm_certificate_arn  = module.dns.certificate_arn
+
+  common_tags = local.common_tags
+}
+
+module "ecs_iam" {
+  source = "./modules/ecs-iam"
+
+  project = var.project
+  env     = var.env
+
+  common_tags = local.common_tags
+}
+
+module "ecs_task_web" {
+  source = "./modules/ecs-task-web"
+
+  project = var.project
+  env     = var.env
+
+  aws_region         = var.region
+  execution_role_arn = module.ecs_iam.execution_role_arn
+  web_image          = "${module.ecr.repository_urls["openwebui"]}:latest"
+
+  common_tags = local.common_tags
+}
+
+module "ecs_task_ollama" {
+  source = "./modules/ecs-task-ollama"
+
+  project = var.project
+  env     = var.env
+
+  aws_region         = var.region
+  execution_role_arn = module.ecs_iam.execution_role_arn
+  ollama_image       = "${module.ecr.repository_urls["ollama"]}:latest"
+
+  common_tags = local.common_tags
+}
