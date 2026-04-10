@@ -30,7 +30,7 @@ resource "aws_ecs_task_definition" "this" {
 
       command = [
         "--config.file=/etc/prometheus/prometheus.yml",
-        "--web.enable-otlp-receiver"
+        "--web.enable-remote-write-receiver"
       ]
 
       logConfiguration = {

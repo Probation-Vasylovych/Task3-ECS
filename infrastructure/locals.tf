@@ -13,6 +13,7 @@ locals {
     ollama     = "ollama"
     prometheus = "prometheus"
     grafana    = "grafana"
+    alloy      = "alloy"
   }
 
 }

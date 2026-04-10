@@ -139,6 +139,7 @@ resource "aws_security_group" "prometheus_service" {
     security_groups = [aws_security_group.grafana_service.id]
   }
 
+
   egress {
     description = "Allow all outbound traffic from Prometheus service"
     from_port   = 0
@@ -176,4 +177,14 @@ resource "aws_security_group" "rds" {
   tags = merge(var.common_tags, {
     Name = "${var.project}-${var.env}-rds-sg"
   })
+}
+
+resource "aws_security_group_rule" "web_to_prometheus_9090" {
+  type                     = "ingress"
+  description              = "Allow web service (Alloy sidecar) to send metrics to Prometheus"
+  from_port                = 9090
+  to_port                  = 9090
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.prometheus_service.id
+  source_security_group_id = aws_security_group.web_service.id
 }
