@@ -86,6 +86,8 @@ module "ecs_iam_role" {
   project = var.project
   env     = var.env
 
+  openwebui_database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
+
   common_tags = local.common_tags
 }
 
@@ -98,7 +100,7 @@ module "ecs_task_web" {
   aws_region         = var.region
   execution_role_arn = module.ecs_iam_role.execution_role_arn
   web_image          = "${module.ecr.repository_urls["openwebui"]}:latest"
-
+  database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
   common_tags = local.common_tags
 }
 
@@ -111,6 +113,185 @@ module "ecs_task_ollama" {
   aws_region         = var.region
   execution_role_arn = module.ecs_iam_role.execution_role_arn
   ollama_image       = "${module.ecr.repository_urls["ollama"]}:latest"
+
+  common_tags = local.common_tags
+}
+
+module "ecs_service_ollama" {
+  source = "./modules/ecs-service-ollama"
+
+  project = var.project
+  env     = var.env
+
+  cluster_arn            = module.ecs_cluster.cluster_arn
+  task_definition_arn    = module.ecs_task_ollama.task_definition_arn
+  private_subnet_ids     = module.vpc_config.private_fargate_subnet_ids
+  ollama_security_group_id = module.security_groups.ollama_service_security_group_id
+  service_discovery_service_arn = module.ollama_discovery_service.service_arn
+  common_tags = local.common_tags
+}
+
+module "ecs_service_web" {
+  source = "./modules/ecs-service-web"
+
+  project = var.project
+  env     = var.env
+
+  cluster_arn          = module.ecs_cluster.cluster_arn
+  task_definition_arn  = module.ecs_task_web.task_definition_arn
+  private_subnet_ids   = module.vpc_config.private_fargate_subnet_ids
+  web_security_group_id = module.security_groups.web_service_security_group_id
+  web_target_group_arn = module.alb.web_target_group_arn
+  service_discovery_service_arn = module.web_discovery_service.service_arn
+  common_tags = local.common_tags
+
+  depends_on = [module.alb]
+}
+
+module "prometheus_task" {
+  source = "./modules/ecs-task-prometheus"
+
+  project = var.project
+  env     = var.env
+
+  aws_region = var.region
+
+  execution_role_arn = module.ecs_iam_role.execution_role_arn
+  prometheus_image       = "${module.ecr.repository_urls["prometheus"]}:latest"
+  
+  common_tags = local.common_tags
+}
+
+module "prometheus_service" {
+  source = "./modules/ecs-service-prometheus"
+
+  project = var.project
+  env     = var.env
+
+  cluster_arn          = module.ecs_cluster.cluster_arn
+  task_definition_arn = module.prometheus_task.task_definition_arn
+
+  private_subnet_ids = module.vpc_config.private_fargate_subnet_ids
+  security_group_id  = module.security_groups.prometheus_service_security_group_id
+  service_discovery_service_arn = module.prometheus_discovery_service.service_arn
+
+  common_tags = local.common_tags
+}
+
+module "grafana_task" {
+  source = "./modules/ecs-task-grafana"
+
+  project = var.project
+  env     = var.env
+
+  aws_region = var.region
+
+  execution_role_arn = module.ecs_iam_role.execution_role_arn
+  grafana_image      = "${module.ecr.repository_urls["grafana"]}:latest"
+
+  common_tags = local.common_tags
+}
+
+module "grafana_service" {
+  source = "./modules/ecs-service-grafana"
+
+  project = var.project
+  env     = var.env
+
+  cluster_arn         = module.ecs_cluster.cluster_arn
+  task_definition_arn = module.grafana_task.task_definition_arn
+  target_group_arn = module.alb.grafana_target_group_arn
+  private_subnet_ids = module.vpc_config.private_fargate_subnet_ids
+  security_group_id  = module.security_groups.grafana_service_security_group_id
+  service_discovery_service_arn = module.grafana_discovery_service.service_arn
+  common_tags = local.common_tags
+}
+
+module "service_discovery_namespace" {
+  source = "./modules/service-discovery-namespace"
+
+  project = var.project
+  env     = var.env
+
+  namespace_name = "internal.local"
+  vpc_id         = module.vpc.vpc_id
+
+  common_tags = local.common_tags
+}
+
+module "web_discovery_service" {
+  source = "./modules/service-discovery-service"
+
+  project = var.project
+  env     = var.env
+
+  service_name = "openwebui"
+  namespace_id = module.service_discovery_namespace.namespace_id
+
+  common_tags = local.common_tags
+}
+
+module "ollama_discovery_service" {
+  source = "./modules/service-discovery-service"
+
+  project = var.project
+  env     = var.env
+
+  service_name = "ollama"
+  namespace_id = module.service_discovery_namespace.namespace_id
+
+  common_tags = local.common_tags
+}
+
+module "prometheus_discovery_service" {
+  source = "./modules/service-discovery-service"
+
+  project = var.project
+  env     = var.env
+
+  service_name = "prometheus"
+  namespace_id = module.service_discovery_namespace.namespace_id
+
+  common_tags = local.common_tags
+}
+
+module "grafana_discovery_service" {
+  source = "./modules/service-discovery-service"
+
+  project = var.project
+  env     = var.env
+
+  service_name = "grafana"
+  namespace_id = module.service_discovery_namespace.namespace_id
+
+  common_tags = local.common_tags
+}
+
+module "rds_postgres" {
+  source = "./modules/rds"
+
+  project = var.project
+  env     = var.env
+
+  private_rds_subnet_ids = module.vpc_config.private_rds_subnet_ids
+  rds_security_group_id  = module.security_groups.rds_security_group_id
+
+  db_name     = "openwebui"
+  db_username = "openwebui"
+
+  common_tags = local.common_tags
+}
+
+module "openwebui_database_url_secret" {
+  source = "./modules/openwebui-database-url-secret"
+
+  project = var.project
+  env     = var.env
+
+  rds_master_secret_arn = module.rds_postgres.master_user_secret_arn
+  db_host               = module.rds_postgres.db_instance_endpoint
+  db_port               = module.rds_postgres.db_instance_port
+  db_name               = module.rds_postgres.db_name
 
   common_tags = local.common_tags
 }

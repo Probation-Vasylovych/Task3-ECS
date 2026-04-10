@@ -6,22 +6,15 @@ variable "env" {
   type = string
 }
 
-variable "aws_region" {
+variable "namespace_name" {
   type = string
 }
 
-variable "execution_role_arn" {
-  type = string
-}
-
-variable "web_image" {
+variable "vpc_id" {
   type = string
 }
 
 variable "common_tags" {
   type    = map(string)
-}
-
-variable "database_url_secret_arn" {
-  type = string
+  default = {}
 }

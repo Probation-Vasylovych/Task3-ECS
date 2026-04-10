@@ -6,15 +6,19 @@ variable "env" {
   type = string
 }
 
-variable "aws_region" {
+variable "cluster_arn" {
   type = string
 }
 
-variable "execution_role_arn" {
+variable "task_definition_arn" {
   type = string
 }
 
-variable "web_image" {
+variable "private_subnet_ids" {
+  type = list(string)
+}
+
+variable "ollama_security_group_id" {
   type = string
 }
 
@@ -22,6 +26,6 @@ variable "common_tags" {
   type    = map(string)
 }
 
-variable "database_url_secret_arn" {
+variable "service_discovery_service_arn" {
   type = string
 }

@@ -25,7 +25,7 @@ output "https_listener_arn" {
 
 output "web_target_group_arn" {
   description = "Web target group ARN"
-  value       = aws_lb_target_group.web.arn
+  value       = aws_lb_target_group.web_v3.arn
 }
 
 output "grafana_target_group_arn" {
