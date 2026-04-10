@@ -2,7 +2,7 @@ otelcol.receiver.awsecscontainermetrics "default" {
   collection_interval = "30s"
 
   output {
-    metrics = [otelcol.exporter.otlphttp.prometheus.input]
+    metrics = [otelcol.exporter.prometheus.prom_rw.input]
   }
 }
 
@@ -16,12 +16,16 @@ otelcol.receiver.otlp "default" {
   }
 
   output {
-    metrics = [otelcol.exporter.otlphttp.prometheus.input]
+    metrics = [otelcol.exporter.prometheus.prom_rw.input]
   }
 }
 
-otelcol.exporter.otlphttp "prometheus" {
-  client {
-    endpoint = "http://prometheus.internal.local:9090/api/v1/otlp"
+otelcol.exporter.prometheus "prom_rw" {
+  forward_to = [prometheus.remote_write.to_prom.receiver]
+}
+
+prometheus.remote_write "to_prom" {
+  endpoint {
+    url = "http://prometheus.internal.local:9090/api/v1/write"
   }
 }

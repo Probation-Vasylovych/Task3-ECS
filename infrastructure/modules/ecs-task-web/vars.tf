@@ -25,3 +25,7 @@ variable "common_tags" {
 variable "database_url_secret_arn" {
   type = string
 }
+
+variable "alloy_image" {
+  type = string
+}

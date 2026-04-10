@@ -99,6 +99,7 @@ module "ecs_task_web" {
 
   aws_region         = var.region
   execution_role_arn = module.ecs_iam_role.execution_role_arn
+  alloy_image = "${module.ecr.repository_urls["alloy"]}:latest"
   web_image          = "${module.ecr.repository_urls["openwebui"]}:latest"
   database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
   common_tags = local.common_tags

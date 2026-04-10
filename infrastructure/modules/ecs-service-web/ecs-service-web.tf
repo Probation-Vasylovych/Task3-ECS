@@ -2,7 +2,7 @@ resource "aws_ecs_service" "this" {
   name            = "${var.project}-${var.env}-web-service"
   cluster         = var.cluster_arn
   task_definition = var.task_definition_arn
-  desired_count   = 2
+  desired_count   = 1
   launch_type     = "FARGATE"
   health_check_grace_period_seconds = 300
 
