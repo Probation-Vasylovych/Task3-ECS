@@ -32,7 +32,32 @@ resource "aws_ecs_task_definition" "this" {
         {
           name  = "OLLAMA_BASE_URL"
           value = "http://ollama.internal.local:11434"
-        }
+        },
+
+        {
+  name  = "ENABLE_OTEL"
+  value = "true"
+},
+{
+  name  = "ENABLE_OTEL_METRICS"
+  value = "true"
+},
+{
+  name  = "ENABLE_OTEL_TRACES"
+  value = "true"
+},
+{
+  name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
+  value = "http://127.0.0.1:4317"
+},
+{
+  name  = "OTEL_EXPORTER_OTLP_INSECURE"
+  value = "true"
+},
+{
+  name  = "OTEL_SERVICE_NAME"
+  value = "open-webui"
+}
       ]
 
       secrets = [
