@@ -5,11 +5,3 @@ scrape_configs:
   - job_name: prometheus
     static_configs:
       - targets: ['localhost:9090']
-
-  - job_name: openwebui
-    static_configs:
-      - targets: ['openwebui.internal.local:8080']
-
-  - job_name: ollama
-    static_configs:
-      - targets: ['ollama.internal.local:11434']
