@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "this" {
 },
 {
   name  = "ENABLE_OTEL_TRACES"
-  value = "true"
+  value = "false"
 },
 {
   name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
