@@ -2,7 +2,7 @@ resource "aws_ecs_service" "this" {
   name            = "${var.project}-${var.env}-prometheus"
   cluster         = var.cluster_arn
   task_definition = var.task_definition_arn
-  desired_count   = 1
+  desired_count   = 2
   launch_type     = "FARGATE"
 
   network_configuration {
