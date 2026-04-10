@@ -25,15 +25,6 @@ resource "aws_ecs_task_definition" "this" {
           value = "0.0.0.0:11434"
         }
       ]
-
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          awslogs-group         = "/ecs/${var.project}-${var.env}-ollama"
-          awslogs-region        = var.aws_region
-          awslogs-stream-prefix = "ecs"
-        }
-      }
     }
   ])
 

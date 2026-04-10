@@ -6,22 +6,23 @@ variable "env" {
   type = string
 }
 
-variable "aws_region" {
+variable "rds_master_secret_arn" {
   type = string
 }
 
-variable "execution_role_arn" {
+variable "db_host" {
   type = string
 }
 
-variable "web_image" {
+variable "db_port" {
+  type = number
+}
+
+variable "db_name" {
   type = string
 }
 
 variable "common_tags" {
   type    = map(string)
-}
-
-variable "database_url_secret_arn" {
-  type = string
+  default = {}
 }
