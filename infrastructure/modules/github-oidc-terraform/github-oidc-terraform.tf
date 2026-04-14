@@ -116,7 +116,7 @@ data "aws_iam_policy_document" "terraform_secrets_access" {
     ]
 
     resources = [
-      var.rds_master_secret_arn
+      "${var.rds_master_secret_arn}*"
     ]
   }
 
