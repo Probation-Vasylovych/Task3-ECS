@@ -23,3 +23,7 @@ variable "rds_master_secret_arn" {
   description = "ARN of RDS master secret in Secrets Manager"
   type        = string
 }
+
+variable "openwebui_database_url_secret_arn" {
+  type = string
+}
