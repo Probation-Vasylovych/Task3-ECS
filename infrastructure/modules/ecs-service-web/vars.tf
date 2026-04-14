@@ -27,7 +27,7 @@ variable "web_target_group_arn" {
 }
 
 variable "common_tags" {
-  type    = map(string)
+  type = map(string)
 }
 
 variable "service_discovery_service_arn" {

@@ -28,16 +28,16 @@ resource "aws_ecs_task_definition" "this" {
         }
       ]
 
-environment = [
-  {
-    name  = "GF_SERVER_ROOT_URL"
-    value = "https://birdswatching.pp.ua/grafana/"
-  },
-  {
-    name  = "GF_SERVER_SERVE_FROM_SUB_PATH"
-    value = "true"
-  }
-]
+      environment = [
+        {
+          name  = "GF_SERVER_ROOT_URL"
+          value = "https://birdswatching.pp.ua/grafana/"
+        },
+        {
+          name  = "GF_SERVER_SERVE_FROM_SUB_PATH"
+          value = "true"
+        }
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"

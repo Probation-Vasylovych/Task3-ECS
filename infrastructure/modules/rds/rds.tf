@@ -27,11 +27,11 @@ resource "aws_db_instance" "this" {
   db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [var.rds_security_group_id]
 
-  publicly_accessible      = false
-  multi_az                 = false
-  backup_retention_period  = 7
-  deletion_protection      = false
-  skip_final_snapshot      = true
+  publicly_accessible        = false
+  multi_az                   = false
+  backup_retention_period    = 7
+  deletion_protection        = false
+  skip_final_snapshot        = true
   auto_minor_version_upgrade = true
 
   tags = merge(var.common_tags, {

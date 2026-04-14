@@ -7,9 +7,14 @@ variable "github_repo" {
 }
 
 variable "github_branch" {
-  type    = string
+  type = string
 }
 
 variable "common_tags" {
-  type    = map(string)
+  type = map(string)
+}
+
+variable "github_oidc_provider_arn" {
+  description = "ARN of GitHub Actions OIDC provider"
+  type        = string
 }

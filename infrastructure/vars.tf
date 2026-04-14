@@ -1,6 +1,6 @@
 variable "region" {
-    description="Region where resource will be created"
-    type= string
+  description = "Region where resource will be created"
+  type        = string
 }
 
 variable "vpc_name" {
