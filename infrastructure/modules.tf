@@ -39,6 +39,7 @@ module "github_oidc_terraform" {
   github_repo              = var.github_repo
   github_branch            = var.github_branch
   github_oidc_provider_arn = module.github_oidc_ecr.github_oidc_provider_arn
+  rds_master_secret_arn = module.rds_postgres.master_user_secret_arn                          
   common_tags              = local.common_tags
 }
 
@@ -103,6 +104,7 @@ module "ecs_task_web" {
   alloy_image             = "${module.ecr.repository_urls["alloy"]}:latest"
   web_image               = "${module.ecr.repository_urls["openwebui"]}:latest"
   database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
+  task_role_arn           = module.ecs_exec_iam.task_role_arn
   common_tags             = local.common_tags
 }
 
@@ -295,5 +297,13 @@ module "openwebui_database_url_secret" {
   db_port               = module.rds_postgres.db_instance_port
   db_name               = module.rds_postgres.db_name
 
+  common_tags = local.common_tags
+}
+
+module "ecs_exec_iam" {
+  source = "./modules/ecs-exec-iam"
+
+  project     = var.project
+  env         = var.env
   common_tags = local.common_tags
 }

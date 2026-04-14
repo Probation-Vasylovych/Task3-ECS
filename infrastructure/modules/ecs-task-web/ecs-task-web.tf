@@ -14,6 +14,7 @@ resource "aws_ecs_task_definition" "this" {
   cpu                      = "1024"
   memory                   = "2048"
   execution_role_arn       = var.execution_role_arn
+  task_role_arn            = var.task_role_arn
 
   container_definitions = jsonencode([
     {

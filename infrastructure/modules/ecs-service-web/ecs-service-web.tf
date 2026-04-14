@@ -6,6 +6,8 @@ resource "aws_ecs_service" "this" {
   launch_type                       = "FARGATE"
   health_check_grace_period_seconds = 300
 
+  enable_execute_command = true
+
   load_balancer {
     target_group_arn = var.web_target_group_arn
     container_name   = "web"

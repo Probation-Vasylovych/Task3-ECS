@@ -29,3 +29,7 @@ variable "database_url_secret_arn" {
 variable "alloy_image" {
   type = string
 }
+
+variable "task_role_arn" {
+  type = string
+}
