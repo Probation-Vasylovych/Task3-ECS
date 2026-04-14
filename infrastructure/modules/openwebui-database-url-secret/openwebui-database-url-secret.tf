@@ -10,10 +10,10 @@ locals {
 }
 
 resource "aws_secretsmanager_secret" "this" {
-  name = "${var.project}/${var.env}/openwebui/database-url-v1"
+  name = "${var.project}/${var.env}/openwebui/database-url-v2"
 
   tags = merge(var.common_tags, {
-    Name = "${var.project}-${var.env}-openwebui-database-url-v1"
+    Name = "${var.project}-${var.env}-openwebui-database-url-v2"
   })
 }
 
