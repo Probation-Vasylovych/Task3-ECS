@@ -11,13 +11,13 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
-    load_balancer {
+  load_balancer {
     target_group_arn = var.target_group_arn
     container_name   = "grafana"
     container_port   = 3000
   }
 
-   service_registries {
+  service_registries {
     registry_arn = var.service_discovery_service_arn
   }
 

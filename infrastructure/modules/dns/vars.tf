@@ -1,6 +1,6 @@
 variable "domain_name" {
-    type = string
-  
+  type = string
+
 }
 variable "env" {
   type = string

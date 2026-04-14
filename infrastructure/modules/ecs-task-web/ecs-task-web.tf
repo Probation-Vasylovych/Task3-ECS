@@ -35,29 +35,29 @@ resource "aws_ecs_task_definition" "this" {
         },
 
         {
-  name  = "ENABLE_OTEL"
-  value = "true"
-},
-{
-  name  = "ENABLE_OTEL_METRICS"
-  value = "true"
-},
-{
-  name  = "ENABLE_OTEL_TRACES"
-  value = "true"
-},
-{
-  name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
-  value = "http://127.0.0.1:4317"
-},
-{
-  name  = "OTEL_EXPORTER_OTLP_INSECURE"
-  value = "true"
-},
-{
-  name  = "OTEL_SERVICE_NAME"
-  value = "open-webui"
-}
+          name  = "ENABLE_OTEL"
+          value = "true"
+        },
+        {
+          name  = "ENABLE_OTEL_METRICS"
+          value = "true"
+        },
+        {
+          name  = "ENABLE_OTEL_TRACES"
+          value = "false"
+        },
+        {
+          name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
+          value = "http://127.0.0.1:4317"
+        },
+        {
+          name  = "OTEL_EXPORTER_OTLP_INSECURE"
+          value = "true"
+        },
+        {
+          name  = "OTEL_SERVICE_NAME"
+          value = "open-webui"
+        }
       ]
 
       secrets = [
@@ -77,31 +77,31 @@ resource "aws_ecs_task_definition" "this" {
       }
     },
 
-  {
-    name      = "alloy"
-    image     = var.alloy_image
-    essential = false
+    {
+      name      = "alloy"
+      image     = var.alloy_image
+      essential = false
 
-    portMappings = [
-      {
-        containerPort = 4317
-        protocol      = "tcp"
-      },
-      {
-        containerPort = 4318
-        protocol      = "tcp"
-      }
-    ]
+      portMappings = [
+        {
+          containerPort = 4317
+          protocol      = "tcp"
+        },
+        {
+          containerPort = 4318
+          protocol      = "tcp"
+        }
+      ]
 
-    logConfiguration = {
-      logDriver = "awslogs"
-      options = {
-        awslogs-group         = "/ecs/${var.project}-${var.env}-web"
-        awslogs-region        = var.aws_region
-        awslogs-stream-prefix = "alloy"
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.project}-${var.env}-web"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "alloy"
+        }
       }
     }
-  }
 
   ])
   tags = merge(var.common_tags, {

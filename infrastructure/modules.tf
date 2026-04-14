@@ -1,6 +1,6 @@
 module "vpc" {
-    source = "./modules/vpc"
-    common_tags = local.common_tags
+  source      = "./modules/vpc"
+  common_tags = local.common_tags
 }
 
 module "vpc_config" {
@@ -15,30 +15,31 @@ module "vpc_config" {
 module "ecr" {
   source = "./modules/ecr"
 
-  repositories = local.ecr_repositories
+  repositories       = local.ecr_repositories
   push_principal_arn = module.github_oidc_ecr.role_arn
-  common_tags = local.common_tags
+  common_tags        = local.common_tags
 }
 
 module "github_oidc_ecr" {
   source = "./modules/github-oidc-ecr"
 
-  github_org          = var.github_org
-  github_repo         = var.github_repo
-  github_branch       = var.github_branch
-  aws_region          = var.region
-  aws_account_id      = var.aws_account_id
+  github_org           = var.github_org
+  github_repo          = var.github_repo
+  github_branch        = var.github_branch
+  aws_region           = var.region
+  aws_account_id       = var.aws_account_id
   ecr_repository_names = local.ecr_repositories
-  common_tags         = local.common_tags
+  common_tags          = local.common_tags
 }
 
 module "github_oidc_terraform" {
   source = "./modules/github-oidc-terraform"
 
-  github_org    = var.github_org
-  github_repo   = var.github_repo
-  github_branch = var.github_branch
-  common_tags   = local.common_tags
+  github_org               = var.github_org
+  github_repo              = var.github_repo
+  github_branch            = var.github_branch
+  github_oidc_provider_arn = module.github_oidc_ecr.github_oidc_provider_arn
+  common_tags              = local.common_tags
 }
 
 module "ecs_cluster" {
@@ -72,10 +73,10 @@ module "alb" {
   project = var.project
   env     = var.env
 
-  vpc_id               = module.vpc.vpc_id
-  public_subnet_ids    = module.vpc_config.public_subnet_ids
+  vpc_id                = module.vpc.vpc_id
+  public_subnet_ids     = module.vpc_config.public_subnet_ids
   alb_security_group_id = module.security_groups.alb_security_group_id
-  acm_certificate_arn  = module.dns.certificate_arn
+  acm_certificate_arn   = module.dns.certificate_arn
 
   common_tags = local.common_tags
 }
@@ -97,12 +98,12 @@ module "ecs_task_web" {
   project = var.project
   env     = var.env
 
-  aws_region         = var.region
-  execution_role_arn = module.ecs_iam_role.execution_role_arn
-  alloy_image = "${module.ecr.repository_urls["alloy"]}:latest"
-  web_image          = "${module.ecr.repository_urls["openwebui"]}:latest"
+  aws_region              = var.region
+  execution_role_arn      = module.ecs_iam_role.execution_role_arn
+  alloy_image             = "${module.ecr.repository_urls["alloy"]}:latest"
+  web_image               = "${module.ecr.repository_urls["openwebui"]}:latest"
   database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
-  common_tags = local.common_tags
+  common_tags             = local.common_tags
 }
 
 module "ecs_task_ollama" {
@@ -124,12 +125,12 @@ module "ecs_service_ollama" {
   project = var.project
   env     = var.env
 
-  cluster_arn            = module.ecs_cluster.cluster_arn
-  task_definition_arn    = module.ecs_task_ollama.task_definition_arn
-  private_subnet_ids     = module.vpc_config.private_fargate_subnet_ids
-  ollama_security_group_id = module.security_groups.ollama_service_security_group_id
+  cluster_arn                   = module.ecs_cluster.cluster_arn
+  task_definition_arn           = module.ecs_task_ollama.task_definition_arn
+  private_subnet_ids            = module.vpc_config.private_fargate_subnet_ids
+  ollama_security_group_id      = module.security_groups.ollama_service_security_group_id
   service_discovery_service_arn = module.ollama_discovery_service.service_arn
-  common_tags = local.common_tags
+  common_tags                   = local.common_tags
 }
 
 module "ecs_service_web" {
@@ -138,13 +139,13 @@ module "ecs_service_web" {
   project = var.project
   env     = var.env
 
-  cluster_arn          = module.ecs_cluster.cluster_arn
-  task_definition_arn  = module.ecs_task_web.task_definition_arn
-  private_subnet_ids   = module.vpc_config.private_fargate_subnet_ids
-  web_security_group_id = module.security_groups.web_service_security_group_id
-  web_target_group_arn = module.alb.web_target_group_arn
+  cluster_arn                   = module.ecs_cluster.cluster_arn
+  task_definition_arn           = module.ecs_task_web.task_definition_arn
+  private_subnet_ids            = module.vpc_config.private_fargate_subnet_ids
+  web_security_group_id         = module.security_groups.web_service_security_group_id
+  web_target_group_arn          = module.alb.web_target_group_arn
   service_discovery_service_arn = module.web_discovery_service.service_arn
-  common_tags = local.common_tags
+  common_tags                   = local.common_tags
 
   depends_on = [module.alb]
 }
@@ -158,8 +159,8 @@ module "prometheus_task" {
   aws_region = var.region
 
   execution_role_arn = module.ecs_iam_role.execution_role_arn
-  prometheus_image       = "${module.ecr.repository_urls["prometheus"]}:latest"
-  
+  prometheus_image   = "${module.ecr.repository_urls["prometheus"]}:latest"
+
   common_tags = local.common_tags
 }
 
@@ -169,11 +170,11 @@ module "prometheus_service" {
   project = var.project
   env     = var.env
 
-  cluster_arn          = module.ecs_cluster.cluster_arn
+  cluster_arn         = module.ecs_cluster.cluster_arn
   task_definition_arn = module.prometheus_task.task_definition_arn
 
-  private_subnet_ids = module.vpc_config.private_fargate_subnet_ids
-  security_group_id  = module.security_groups.prometheus_service_security_group_id
+  private_subnet_ids            = module.vpc_config.private_fargate_subnet_ids
+  security_group_id             = module.security_groups.prometheus_service_security_group_id
   service_discovery_service_arn = module.prometheus_discovery_service.service_arn
 
   common_tags = local.common_tags
@@ -199,13 +200,13 @@ module "grafana_service" {
   project = var.project
   env     = var.env
 
-  cluster_arn         = module.ecs_cluster.cluster_arn
-  task_definition_arn = module.grafana_task.task_definition_arn
-  target_group_arn = module.alb.grafana_target_group_arn
-  private_subnet_ids = module.vpc_config.private_fargate_subnet_ids
-  security_group_id  = module.security_groups.grafana_service_security_group_id
+  cluster_arn                   = module.ecs_cluster.cluster_arn
+  task_definition_arn           = module.grafana_task.task_definition_arn
+  target_group_arn              = module.alb.grafana_target_group_arn
+  private_subnet_ids            = module.vpc_config.private_fargate_subnet_ids
+  security_group_id             = module.security_groups.grafana_service_security_group_id
   service_discovery_service_arn = module.grafana_discovery_service.service_arn
-  common_tags = local.common_tags
+  common_tags                   = local.common_tags
 }
 
 module "service_discovery_namespace" {

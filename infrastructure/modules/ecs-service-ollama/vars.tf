@@ -23,7 +23,7 @@ variable "ollama_security_group_id" {
 }
 
 variable "common_tags" {
-  type    = map(string)
+  type = map(string)
 }
 
 variable "service_discovery_service_arn" {

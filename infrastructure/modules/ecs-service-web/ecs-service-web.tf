@@ -1,9 +1,9 @@
 resource "aws_ecs_service" "this" {
-  name            = "${var.project}-${var.env}-web-service"
-  cluster         = var.cluster_arn
-  task_definition = var.task_definition_arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
+  name                              = "${var.project}-${var.env}-web-service"
+  cluster                           = var.cluster_arn
+  task_definition                   = var.task_definition_arn
+  desired_count                     = 1
+  launch_type                       = "FARGATE"
   health_check_grace_period_seconds = 300
 
   load_balancer {
@@ -18,7 +18,7 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
-   service_registries {
+  service_registries {
     registry_arn = var.service_discovery_service_arn
   }
 

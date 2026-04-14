@@ -11,7 +11,7 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
-   service_registries {
+  service_registries {
     registry_arn = var.service_discovery_service_arn
   }
 

@@ -19,7 +19,7 @@ variable "web_image" {
 }
 
 variable "common_tags" {
-  type    = map(string)
+  type = map(string)
 }
 
 variable "database_url_secret_arn" {

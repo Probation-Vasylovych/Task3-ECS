@@ -22,10 +22,10 @@ resource "aws_s3_bucket_policy" "tf_state_https_policy" {
     Id      = "ExamplePolicy"
     Statement = [
       {
-        Sid    = "HTTPSOnly"
-        Effect = "Deny"
+        Sid       = "HTTPSOnly"
+        Effect    = "Deny"
         Principal = "*"
-        Action = "s3:*"
+        Action    = "s3:*"
         Resource = [
           aws_s3_bucket.tf_state.arn,
           "${aws_s3_bucket.tf_state.arn}/*",
