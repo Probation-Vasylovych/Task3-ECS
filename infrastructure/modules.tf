@@ -39,8 +39,6 @@ module "github_oidc_terraform" {
   github_repo                       = var.github_repo
   github_branch                     = var.github_branch
   github_oidc_provider_arn          = module.github_oidc_ecr.github_oidc_provider_arn
-  rds_master_secret_arn             = module.rds_postgres.master_user_secret_arn
-  openwebui_database_url_secret_arn = module.openwebui_database_url_secret.secret_arn
   common_tags                       = local.common_tags
 }
 
