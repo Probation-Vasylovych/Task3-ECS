@@ -134,3 +134,20 @@ data "aws_iam_policy_document" "terraform_secrets_access" {
     ]
   }
 }
+
+resource "aws_iam_policy" "terraform_secrets_access" {
+  name   = "github-actions-terraform-secrets-policy"
+  policy = data.aws_iam_policy_document.terraform_secrets_access.json
+
+  tags = merge(
+    var.common_tags,
+    {
+      Name = "github-actions-terraform-secrets-policy"
+    }
+  )
+}
+
+resource "aws_iam_role_policy_attachment" "terraform_secrets_access" {
+  role       = aws_iam_role.github_terraform_role.name
+  policy_arn = aws_iam_policy.terraform_secrets_access.arn
+}
