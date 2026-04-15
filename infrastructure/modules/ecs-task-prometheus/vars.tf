@@ -27,3 +27,7 @@ variable "common_tags" {
   type        = map(string)
   description = "Common tags for resources"
 }
+
+variable "alloy_image" {
+  type = string
+}

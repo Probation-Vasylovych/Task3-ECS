@@ -83,6 +83,13 @@ resource "aws_ecs_task_definition" "this" {
       image     = var.alloy_image
       essential = false
 
+      environment = [
+        {
+          name  = "MONITORED_SERVICE"
+          value = "web"
+        }
+      ]
+
       portMappings = [
         {
           containerPort = 4317

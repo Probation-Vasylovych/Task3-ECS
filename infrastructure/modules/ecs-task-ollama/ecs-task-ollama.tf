@@ -25,7 +25,29 @@ resource "aws_ecs_task_definition" "this" {
           value = "0.0.0.0:11434"
         }
       ]
+    },
+    {
+      name      = "alloy"
+      image     = var.alloy_image
+      essential = false
+
+      environment = [
+        {
+          name  = "MONITORED_SERVICE"
+          value = "ollama"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.project}-${var.env}-ollama"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "alloy"
+        }
+      }
     }
+
   ])
 
   tags = merge(var.common_tags, {
