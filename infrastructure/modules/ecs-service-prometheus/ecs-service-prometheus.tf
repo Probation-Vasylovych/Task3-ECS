@@ -11,6 +11,12 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
+  load_balancer {
+    target_group_arn = var.target_group_arn
+    container_name   = "prometheus"
+    container_port   = 9090
+  }
+
   service_registries {
     registry_arn = var.service_discovery_service_arn
   }

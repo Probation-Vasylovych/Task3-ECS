@@ -35,11 +35,11 @@ module "github_oidc_ecr" {
 module "github_oidc_terraform" {
   source = "./modules/github-oidc-terraform"
 
-  github_org                        = var.github_org
-  github_repo                       = var.github_repo
-  github_branch                     = var.github_branch
-  github_oidc_provider_arn          = module.github_oidc_ecr.github_oidc_provider_arn
-  common_tags                       = local.common_tags
+  github_org               = var.github_org
+  github_repo              = var.github_repo
+  github_branch            = var.github_branch
+  github_oidc_provider_arn = module.github_oidc_ecr.github_oidc_provider_arn
+  common_tags              = local.common_tags
 }
 
 module "ecs_cluster" {
@@ -77,8 +77,8 @@ module "alb" {
   public_subnet_ids     = module.vpc_config.public_subnet_ids
   alb_security_group_id = module.security_groups.alb_security_group_id
   acm_certificate_arn   = module.dns.certificate_arn
-
-  common_tags = local.common_tags
+  domain_name           = var.domain_name
+  common_tags           = local.common_tags
 }
 
 module "ecs_iam_role" {
@@ -171,14 +171,13 @@ module "prometheus_service" {
   project = var.project
   env     = var.env
 
-  cluster_arn         = module.ecs_cluster.cluster_arn
-  task_definition_arn = module.prometheus_task.task_definition_arn
-
+  cluster_arn                   = module.ecs_cluster.cluster_arn
+  task_definition_arn           = module.prometheus_task.task_definition_arn
+  target_group_arn              = module.alb.prometheus_target_group_arn
   private_subnet_ids            = module.vpc_config.private_fargate_subnet_ids
   security_group_id             = module.security_groups.prometheus_service_security_group_id
   service_discovery_service_arn = module.prometheus_discovery_service.service_arn
-
-  common_tags = local.common_tags
+  common_tags                   = local.common_tags
 }
 
 module "grafana_task" {

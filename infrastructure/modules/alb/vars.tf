@@ -33,3 +33,7 @@ variable "common_tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "domain_name" {
+  type = string
+}

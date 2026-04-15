@@ -139,6 +139,14 @@ resource "aws_security_group" "prometheus_service" {
     security_groups = [aws_security_group.grafana_service.id]
   }
 
+  ingress {
+    description     = "Allow Grafana to query Prometheus"
+    from_port       = 9090
+    to_port         = 9090
+    protocol        = "tcp"
+    security_groups = [aws_security_group.alb.id]
+  }
+
 
   egress {
     description = "Allow all outbound traffic from Prometheus service"

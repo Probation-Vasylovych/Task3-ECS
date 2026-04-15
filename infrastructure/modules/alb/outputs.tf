@@ -32,3 +32,8 @@ output "grafana_target_group_arn" {
   description = "Grafana target group ARN"
   value       = aws_lb_target_group.grafana.arn
 }
+
+output "prometheus_target_group_arn" {
+  description = "Prometheus target group ARN"
+  value       = aws_lb_target_group.prometheus.arn
+}
