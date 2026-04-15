@@ -37,3 +37,7 @@ variable "common_tags" {
 variable "service_discovery_service_arn" {
   type = string
 }
+
+variable "target_group_arn" {
+  type = string
+}

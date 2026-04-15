@@ -1,8 +1,22 @@
+otelcol.processor.attributes "identity" {
+  actions = [
+    {
+      key    = "service_name"
+      action = "insert"
+      value  = env("MONITORED_SERVICE")
+    }
+  ]
+
+  output {
+    metrics = [otelcol.exporter.prometheus.prom_rw.input]
+  }
+}
+
 otelcol.receiver.awsecscontainermetrics "default" {
   collection_interval = "30s"
 
   output {
-    metrics = [otelcol.exporter.prometheus.prom_rw.input]
+    metrics = [otelcol.processor.attributes.identity.input]
   }
 }
 
@@ -16,7 +30,7 @@ otelcol.receiver.otlp "default" {
   }
 
   output {
-    metrics = [otelcol.exporter.prometheus.prom_rw.input]
+    metrics = [otelcol.processor.attributes.identity.input]
   }
 }
 
