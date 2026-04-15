@@ -1,22 +1,8 @@
-otelcol.processor.attributes "identity" {
-  attributes = [
-    {
-      key    = "service_name",
-      action = "insert",
-      value  = env("MONITORED_SERVICE")
-    }
-  ]
-
-  output {
-    metrics = [otelcol.exporter.prometheus.prom_rw.input]
-  }
-}
-
 otelcol.receiver.awsecscontainermetrics "default" {
   collection_interval = "30s"
 
   output {
-    metrics = [otelcol.processor.attributes.identity.input]
+    metrics = [otelcol.exporter.prometheus.prom_rw.input]
   }
 }
 
@@ -30,7 +16,7 @@ otelcol.receiver.otlp "default" {
   }
 
   output {
-    metrics = [otelcol.processor.attributes.identity.input]
+    metrics = [otelcol.exporter.prometheus.prom_rw.input]
   }
 }
 
@@ -39,6 +25,10 @@ otelcol.exporter.prometheus "prom_rw" {
 }
 
 prometheus.remote_write "to_prom" {
+  external_labels = {
+    service_name = env("MONITORED_SERVICE")
+  }
+
   endpoint {
     url = "http://prometheus.internal.local:9090/api/v1/write"
   }
