@@ -3,7 +3,7 @@ otelcol.processor.attributes "identity" {
     {
       key    = "service_name",
       action = "insert",
-      value  = env("MONITORED_SERVICE"),
+      value  = env("MONITORED_SERVICE")
     }
   ]
 
