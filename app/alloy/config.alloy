@@ -1,11 +1,9 @@
 otelcol.processor.attributes "identity" {
-  actions = [
-    {
-      key    = "service_name",
-      action = "insert",
-      value  = env("MONITORED_SERVICE"),
-    },
-  ]
+  attribute {
+    key    = "service_name"
+    action = "insert"
+    value  = env("MONITORED_SERVICE")
+  }
 
   output {
     metrics = [otelcol.exporter.prometheus.prom_rw.input]
