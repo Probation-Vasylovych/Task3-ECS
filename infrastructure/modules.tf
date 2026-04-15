@@ -116,7 +116,7 @@ module "ecs_task_ollama" {
   aws_region         = var.region
   execution_role_arn = module.ecs_iam_role.execution_role_arn
   ollama_image       = "${module.ecr.repository_urls["ollama"]}:latest"
-
+  alloy_image             = "${module.ecr.repository_urls["alloy"]}:latest"
   common_tags = local.common_tags
 }
 
@@ -161,7 +161,7 @@ module "prometheus_task" {
 
   execution_role_arn = module.ecs_iam_role.execution_role_arn
   prometheus_image   = "${module.ecr.repository_urls["prometheus"]}:latest"
-
+  alloy_image             = "${module.ecr.repository_urls["alloy"]}:latest"
   common_tags = local.common_tags
 }
 
@@ -190,7 +190,7 @@ module "grafana_task" {
 
   execution_role_arn = module.ecs_iam_role.execution_role_arn
   grafana_image      = "${module.ecr.repository_urls["grafana"]}:latest"
-
+  alloy_image             = "${module.ecr.repository_urls["alloy"]}:latest"
   common_tags = local.common_tags
 }
 

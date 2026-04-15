@@ -47,7 +47,30 @@ resource "aws_ecs_task_definition" "this" {
           awslogs-stream-prefix = "ecs"
         }
       }
+    },
+
+    {
+      name      = "alloy"
+      image     = var.alloy_image
+      essential = false
+
+      environment = [
+        {
+          name  = "MONITORED_SERVICE"
+          value = "grafana"
+        }
+      ]
+
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = "/ecs/${var.project}-${var.env}-grafana"
+          awslogs-region        = var.aws_region
+          awslogs-stream-prefix = "alloy"
+        }
+      }
     }
+
   ])
 
   tags = merge(var.common_tags, {

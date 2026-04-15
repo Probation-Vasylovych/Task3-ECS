@@ -196,3 +196,13 @@ resource "aws_security_group_rule" "web_to_prometheus_9090" {
   security_group_id        = aws_security_group.prometheus_service.id
   source_security_group_id = aws_security_group.web_service.id
 }
+
+resource "aws_security_group_rule" "ollama_to_prometheus_9090" {
+  type                     = "ingress"
+  description              = "Allow Ollama service (Alloy sidecar) to send metrics to Prometheus"
+  from_port                = 9090
+  to_port                  = 9090
+  protocol                 = "tcp"
+  security_group_id        = aws_security_group.prometheus_service.id
+  source_security_group_id = aws_security_group.ollama_service.id
+}
