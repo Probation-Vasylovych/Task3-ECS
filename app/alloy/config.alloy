@@ -26,7 +26,7 @@ otelcol.exporter.prometheus "prom_rw" {
 
 prometheus.remote_write "to_prom" {
   external_labels = {
-    service_name = env("MONITORED_SERVICE")
+    service_name = env("MONITORED_SERVICE"),
   }
 
   endpoint {
